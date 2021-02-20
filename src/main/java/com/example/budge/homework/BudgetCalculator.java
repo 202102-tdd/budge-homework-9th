@@ -24,6 +24,7 @@ public class BudgetCalculator {
     }
 
     public Double query(LocalDate start, LocalDate end) {
+
         YearMonth startY = YearMonth.from(start);
 
         // get iterator months
@@ -36,7 +37,8 @@ public class BudgetCalculator {
             startY = YearMonth.from(tmp);
         }
 
-        List<BudgetVo> budgetVos = new ArrayList<>(budgetRepo.getAll().stream()
+        List<Budget> budgets = budgetRepo.getAll();
+        List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
                 .map(budget -> BudgetVo.builder()
                         .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
                         .amount(budget.getAmount())
@@ -49,9 +51,9 @@ public class BudgetCalculator {
             dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
         } else {
             for (int i = 0; i < budgetVos.size(); i++) {
-                if (i==0) {
-                    dayCountsEachMonth.add(budgetVos.get(0).getYearMonth().lengthOfMonth()-start.getDayOfMonth()+1);
-                } else if (i == budgetVos.size() -1) {
+                if (i == 0) {
+                    dayCountsEachMonth.add(budgetVos.get(0).getYearMonth().lengthOfMonth() - start.getDayOfMonth() + 1);
+                } else if (i == budgetVos.size() - 1) {
                     dayCountsEachMonth.add(end.getDayOfMonth());
                 } else {
                     dayCountsEachMonth.add(budgetVos.get(i).getYearMonth().lengthOfMonth());
@@ -59,7 +61,7 @@ public class BudgetCalculator {
             }
         }
 
-        List<Double> priceUnitEachMonth = budgetRepo.getAll().stream()
+        List<Double> priceUnitEachMonth = budgets.stream()
                 .map(budget -> BudgetVo.builder()
                         .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
                         .amount(budget.getAmount())
@@ -67,8 +69,8 @@ public class BudgetCalculator {
                 .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
                 .collect(toList())
                 .stream()
-                .map( v-> {
-                    return v.getAmount()/ (double) (v.getYearMonth().lengthOfMonth());
+                .map(v -> {
+                    return v.getAmount() / (double) (v.getYearMonth().lengthOfMonth());
                 })
                 .collect(toList());
 
