@@ -19,27 +19,27 @@ public class Budget {
 
     private Integer amount;
 
-    public LocalDate lastDay() {
+    double overlappingAmount(Period period) {
+        return getDailyAmount() * period.getOverlappingDays(createPeriod());
+    }
+
+    private LocalDate lastDay() {
         return getYearMonthInstance().atEndOfMonth();
     }
 
-    public LocalDate firstDay() {
+    private LocalDate firstDay() {
         return getYearMonthInstance().atDay(1);
     }
 
-    YearMonth getYearMonthInstance() {
+    private YearMonth getYearMonthInstance() {
         return YearMonth.parse(getYearMonth(), DateTimeFormatter.ofPattern("yyyyMM"));
     }
 
-    double getDailyAmount() {
+    private double getDailyAmount() {
         return getAmount() / (double) (getYearMonthInstance().lengthOfMonth());
     }
 
-    Period createPeriod() {
+    private Period createPeriod() {
         return new Period(firstDay(), lastDay());
-    }
-
-    double overlappingAmount(Period period) {
-        return getDailyAmount() * period.getOverlappingDays(createPeriod());
     }
 }
