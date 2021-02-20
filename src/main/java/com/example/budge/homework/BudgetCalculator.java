@@ -23,18 +23,7 @@ public class BudgetCalculator {
     }
 
     public Double query(LocalDate start, LocalDate end) {
-        YearMonth startY = YearMonth.from(start);
 
-        // get iterator months
-        // (202101, 202103) -> (01, 02, 03)
-//        LocalDate tmp = LocalDate.of(start.getYear(), start.getMonthValue(), 1);
-//        List<String> monthRange = new ArrayList<>();
-//        while (!tmp.isAfter(end)) {
-//            monthRange.add(startY.format(df));
-//            tmp = tmp.plusMonths(1);
-//            startY = YearMonth.from(tmp);
-//        }
-//
         List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
         {
             YearMonth yearMonthOfBudget = b.getYearMonthInstance();
