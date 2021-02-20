@@ -7,7 +7,6 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -36,30 +35,40 @@ public class BudgetCalculator {
             startY = YearMonth.from(tmp);
         }
 
-        List<BudgetVo> budgetVos = new ArrayList<>(budgetRepo.getAll().stream()
-                .map(budget -> BudgetVo.builder()
-                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
-                        .amount(budget.getAmount())
-                        .build())
-                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
-                .collect(toList()));
+//        List<Budget> budgets = budgetRepo.getAll();
+        List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
+        {
+            YearMonth yearMonthOfBudget = b.getYearMonthInstance();
+            YearMonth startYearMonth = YearMonth.from(start);
+            YearMonth endYearMonth = YearMonth.from(end);
+            return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
+                    (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
+        }).collect(toList());
+
+//        List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
+//                .map(budget -> BudgetVo.builder()
+//                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
+//                        .amount(budget.getAmount())
+//                        .build())
+//                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
+//                .collect(toList()));
 
         List<Integer> dayCountsEachMonth = new ArrayList<>();
-        if (budgetVos.size() == 1) {
+        if (budgets.size() == 1) {
             dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
         } else {
-            for (int i = 0; i < budgetVos.size(); i++) {
-                if (i==0) {
-                    dayCountsEachMonth.add(budgetVos.get(0).getYearMonth().lengthOfMonth()-start.getDayOfMonth()+1);
-                } else if (i == budgetVos.size() -1) {
+            for (int i = 0; i < budgets.size(); i++) {
+                if (i == 0) {
+                    dayCountsEachMonth.add(budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1);
+                } else if (i == budgets.size() - 1) {
                     dayCountsEachMonth.add(end.getDayOfMonth());
                 } else {
-                    dayCountsEachMonth.add(budgetVos.get(i).getYearMonth().lengthOfMonth());
+                    dayCountsEachMonth.add(budgets.get(i).getYearMonthInstance().lengthOfMonth());
                 }
             }
         }
 
-        List<Double> priceUnitEachMonth = budgetRepo.getAll().stream()
+        List<Double> priceUnitEachMonth = budgets.stream()
                 .map(budget -> BudgetVo.builder()
                         .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
                         .amount(budget.getAmount())
@@ -67,8 +76,8 @@ public class BudgetCalculator {
                 .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
                 .collect(toList())
                 .stream()
-                .map( v-> {
-                    return v.getAmount()/ (double) (v.getYearMonth().lengthOfMonth());
+                .map(v -> {
+                    return v.getAmount() / (double) (v.getYearMonth().lengthOfMonth());
                 })
                 .collect(toList());
 
