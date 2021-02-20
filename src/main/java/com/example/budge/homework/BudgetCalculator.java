@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public class BudgetCalculator {
 
-    private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMM");
-    private DateTimeFormatter df2 = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private DateTimeFormatter df = ofPattern("yyyyMM");
+    private DateTimeFormatter df2 = ofPattern("yyyyMMdd");
 
     private BudgetRepo budgetRepo;
 
@@ -37,7 +38,15 @@ public class BudgetCalculator {
             startY = YearMonth.from(tmp);
         }
 
-        List<Budget> budgets = budgetRepo.getAll();
+        List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
+        {
+            YearMonth yearMonthOfBudget = YearMonth.parse(b.getYearMonth(), ofPattern("yyyyMM"));
+            YearMonth startYearMonth = YearMonth.from(start);
+            YearMonth endYearMonth = YearMonth.from(end);
+            return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
+                    (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
+        }).collect(toList());
+
         List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
                 .map(budget -> BudgetVo.builder()
                         .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
