@@ -23,6 +23,10 @@ public class Budget {
         return getYearMonthInstance().atEndOfMonth();
     }
 
+    public LocalDate firstDay() {
+        return getYearMonthInstance().atDay(1);
+    }
+
     YearMonth getYearMonthInstance() {
         return YearMonth.parse(getYearMonth(), DateTimeFormatter.ofPattern("yyyyMM"));
     }
