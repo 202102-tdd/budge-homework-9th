@@ -39,12 +39,10 @@ public class BudgetCalculator {
         }).collect(toList());
 
         double rtn = 0.0;
-        HashMap<String, Integer> dayCountsEachMonth = new HashMap<>();
         if (budgets.size() == 1) {
             int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
             double dailyAmount = budgets.get(0).getAmount() / (double) (budgets.get(0).getYearMonthInstance().lengthOfMonth());
             return overlappingDays * dailyAmount;
-//            dayCountsEachMonth.put(budgets.get(0).getYearMonth(), overlappingDays);
         } else {
             for (Budget budget : budgets) {
                 int overlappingDays;
@@ -57,19 +55,8 @@ public class BudgetCalculator {
                 }
                 double dailyAmount = budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth());
                 rtn += dailyAmount * overlappingDays;
-
-//                dayCountsEachMonth.put(budget.getYearMonth(), overlappingDays);
             }
         }
-
-//        Map<String, Double> priceUnitEachMonth = budgets.stream()
-//                .collect(toMap(Budget::getYearMonth,
-//                        budget -> budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth())
-//                ));
-//
-//        for (Map.Entry<String, Double> entry : priceUnitEachMonth.entrySet()) {
-//            rtn += dayCountsEachMonth.get(entry.getKey()) * entry.getValue();
-//        }
 
         return rtn;
     }
