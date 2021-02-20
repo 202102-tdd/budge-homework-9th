@@ -41,14 +41,10 @@ public class BudgetCalculator {
         } else {
             Period period = new Period(start, end);
             for (Budget budget : budgets) {
-                rtn += overlappingAmount(period, budget);
+                rtn += budget.overlappingAmount(period);
             }
         }
 
         return rtn;
-    }
-
-    private double overlappingAmount(Period period, Budget budget) {
-        return budget.getDailyAmount() * period.getOverlappingDays(budget.createPeriod());
     }
 }
