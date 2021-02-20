@@ -22,10 +22,10 @@ public class Period {
             overlappingEnd = budget.lastDay();
             overlappingStart = start.isAfter(budget.firstDay()) ? start : budget.firstDay();
         } else if (budget.getYearMonth().equals(end.format(ofPattern("yyyyMM")))) {
-            overlappingStart = budget.firstDay();
+            overlappingStart = start.isAfter(budget.firstDay()) ? start : budget.firstDay();
             overlappingEnd = end;
         } else {
-            overlappingStart = budget.firstDay();
+            overlappingStart = start.isAfter(budget.firstDay()) ? start : budget.firstDay();
             overlappingEnd = budget.lastDay();
         }
         return DAYS.between(overlappingStart, overlappingEnd) + 1;
