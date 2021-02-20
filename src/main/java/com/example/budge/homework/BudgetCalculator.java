@@ -40,23 +40,11 @@ public class BudgetCalculator {
             return overlappingDays * budgets.get(0).getDailyAmount();
         } else {
             for (Budget budget : budgets) {
-                int overlappingDays = getOverlappingDays(new Period(start, end), budget);
+                int overlappingDays = new Period(start, end).getOverlappingDays(budget);
                 rtn += budget.getDailyAmount() * overlappingDays;
             }
         }
 
         return rtn;
-    }
-
-    private int getOverlappingDays(Period period, Budget budget) {
-        int overlappingDays;
-        if (budget.getYearMonth().equals(period.getStart().format(ofPattern("yyyyMM")))) {
-            overlappingDays = budget.getYearMonthInstance().lengthOfMonth() - period.getStart().getDayOfMonth() + 1;
-        } else if (budget.getYearMonth().equals(period.getEnd().format(ofPattern("yyyyMM")))) {
-            overlappingDays = period.getEnd().getDayOfMonth();
-        } else {
-            overlappingDays = budget.getYearMonthInstance().lengthOfMonth();
-        }
-        return overlappingDays;
     }
 }
