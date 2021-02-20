@@ -20,7 +20,7 @@ public class Period {
         LocalDate overlappingStart;
         if (budget.getYearMonth().equals(start.format(ofPattern("yyyyMM")))) {
             overlappingEnd = budget.lastDay();
-            overlappingStart = start;
+            overlappingStart = start.isAfter(budget.firstDay()) ? start : budget.firstDay();
         } else if (budget.getYearMonth().equals(end.format(ofPattern("yyyyMM")))) {
             overlappingStart = budget.firstDay();
             overlappingEnd = end;
