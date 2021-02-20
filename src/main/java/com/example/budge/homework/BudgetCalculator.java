@@ -41,7 +41,7 @@ public class BudgetCalculator {
         double rtn = 0.0;
         if (budgets.size() == 1) {
             int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
-            double dailyAmount = budgets.get(0).getAmount() / (double) (budgets.get(0).getYearMonthInstance().lengthOfMonth());
+            double dailyAmount = getDailyAmount(budgets.get(0));
             return overlappingDays * dailyAmount;
         } else {
             for (Budget budget : budgets) {
@@ -53,11 +53,15 @@ public class BudgetCalculator {
                 } else {
                     overlappingDays = budget.getYearMonthInstance().lengthOfMonth();
                 }
-                double dailyAmount = budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth());
+                double dailyAmount = getDailyAmount(budget);
                 rtn += dailyAmount * overlappingDays;
             }
         }
 
         return rtn;
+    }
+
+    private double getDailyAmount(Budget budget) {
+        return budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth());
     }
 }
