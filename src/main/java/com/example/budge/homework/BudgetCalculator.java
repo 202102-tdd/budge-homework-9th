@@ -36,15 +36,15 @@ public class BudgetCalculator {
 
         double rtn = 0.0;
         Period period = new Period(start, end);
-        if (budgets.size() == 1) {
-            return budgets.get(0).overlappingAmount(period);
-//            int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
-//            return overlappingDays * budgets.get(0).getDailyAmount();
-        } else {
-            for (Budget budget : budgets) {
-                rtn += budget.overlappingAmount(period);
-            }
+//        if (budgets.size() == 1) {
+//            return budgets.get(0).overlappingAmount(period);
+////            int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
+////            return overlappingDays * budgets.get(0).getDailyAmount();
+//        } else {
+        for (Budget budget : budgets) {
+            rtn += budget.overlappingAmount(period);
         }
+//        }
 
         return rtn;
     }
