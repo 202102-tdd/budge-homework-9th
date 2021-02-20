@@ -40,7 +40,7 @@ public class BudgetCalculator {
             return overlappingDays * budgets.get(0).getDailyAmount();
         } else {
             for (Budget budget : budgets) {
-                long overlappingDays = new Period(start, end).getOverlappingDays(budget);
+                long overlappingDays = new Period(start, end).getOverlappingDays(new Period(budget.firstDay(), budget.lastDay()));
                 rtn += budget.getDailyAmount() * overlappingDays;
             }
         }
