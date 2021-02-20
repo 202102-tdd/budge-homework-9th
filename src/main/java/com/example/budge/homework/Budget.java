@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
@@ -17,6 +18,10 @@ public class Budget {
     private String yearMonth;
 
     private Integer amount;
+
+    public LocalDate lastDay() {
+        return getYearMonthInstance().atEndOfMonth();
+    }
 
     YearMonth getYearMonthInstance() {
         return YearMonth.parse(getYearMonth(), DateTimeFormatter.ofPattern("yyyyMM"));

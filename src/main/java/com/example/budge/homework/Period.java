@@ -3,6 +3,7 @@ package com.example.budge.homework;
 import java.time.LocalDate;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Period {
     private final LocalDate start;
@@ -21,13 +22,14 @@ public class Period {
         return end;
     }
 
-    int getOverlappingDays(Budget budget) {
-        int overlappingDays;
+    long getOverlappingDays(Budget budget) {
+        long overlappingDays;
         if (budget.getYearMonth().equals(getStart().format(ofPattern("yyyyMM")))) {
-            int endDays = budget.getYearMonthInstance().lengthOfMonth();
+            LocalDate overlappingEnd = budget.lastDay();
 //            int endDays = budget.getYearMonthInstance().lengthOfMonth();
             LocalDate overlappingStart = getStart();
-            overlappingDays = endDays - overlappingStart.getDayOfMonth() + 1;
+            overlappingDays = DAYS.between(overlappingStart, overlappingEnd) + 1;
+//            overlappingDays = endDays - overlappingStart.getDayOfMonth() + 1;
         } else if (budget.getYearMonth().equals(getEnd().format(ofPattern("yyyyMM")))) {
             overlappingDays = getEnd().getDayOfMonth();
         } else {
