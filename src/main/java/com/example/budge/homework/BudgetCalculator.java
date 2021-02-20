@@ -25,26 +25,20 @@ public class BudgetCalculator {
 
     public Double query(LocalDate start, LocalDate end) {
 
-        List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
-        {
-            YearMonth yearMonthOfBudget = b.getYearMonthInstance();
-            YearMonth startYearMonth = YearMonth.from(start);
-            YearMonth endYearMonth = YearMonth.from(end);
-            return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
-                    (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
-        }).collect(toList());
+//        List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
+//        {
+//            YearMonth yearMonthOfBudget = b.getYearMonthInstance();
+//            YearMonth startYearMonth = YearMonth.from(start);
+//            YearMonth endYearMonth = YearMonth.from(end);
+//            return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
+//                    (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
+//        }).collect(toList());
 
         double rtn = 0.0;
         Period period = new Period(start, end);
-//        if (budgets.size() == 1) {
-//            return budgets.get(0).overlappingAmount(period);
-////            int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
-////            return overlappingDays * budgets.get(0).getDailyAmount();
-//        } else {
-        for (Budget budget : budgets) {
+        for (Budget budget : budgetRepo.getAll()) {
             rtn += budget.overlappingAmount(period);
         }
-//        }
 
         return rtn;
     }
