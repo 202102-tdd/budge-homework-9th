@@ -40,7 +40,7 @@ public class BudgetCalculator {
 
         List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
         {
-            YearMonth yearMonthOfBudget = YearMonth.parse(b.getYearMonth(), ofPattern("yyyyMM"));
+            YearMonth yearMonthOfBudget = getYearMonthInstance(b);
             YearMonth startYearMonth = YearMonth.from(start);
             YearMonth endYearMonth = YearMonth.from(end);
             return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
@@ -89,5 +89,9 @@ public class BudgetCalculator {
         }
 
         return rtn;
+    }
+
+    private YearMonth getYearMonthInstance(Budget b) {
+        return YearMonth.parse(b.getYearMonth(), ofPattern("yyyyMM"));
     }
 }
