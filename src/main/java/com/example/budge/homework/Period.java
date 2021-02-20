@@ -21,7 +21,7 @@ public class Period {
         if (budget.getYearMonth().equals(start.format(ofPattern("yyyyMM")))) {
             overlappingEnd = budget.lastDay();
         } else if (budget.getYearMonth().equals(end.format(ofPattern("yyyyMM")))) {
-            overlappingEnd = end;
+            overlappingEnd = end.isBefore(budget.lastDay()) ? end : budget.lastDay();
         } else {
             overlappingEnd = budget.lastDay();
         }
