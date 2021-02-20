@@ -42,30 +42,17 @@ public class BudgetCalculator {
         if (budgets.size() == 1) {
             dayCountsEachMonth.put(budgets.get(0).getYearMonth(), end.getDayOfMonth() - start.getDayOfMonth() + 1);
         } else {
-//            for (int i = 0; i < budgets.size(); i++) {
-            int overlappingDays;
             for (Budget budget : budgets) {
-
+                int overlappingDays;
                 if (budget.getYearMonth().equals(start.format(ofPattern("yyyyMM")))) {
-//                if (i == 0) {
                     overlappingDays = budget.getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1;
                 } else if (budget.getYearMonth().equals(end.format(ofPattern("yyyyMM")))) {
-//                } else if (i == budgets.size() - 1) {
                     overlappingDays = end.getDayOfMonth();
                 } else {
                     overlappingDays = budget.getYearMonthInstance().lengthOfMonth();
                 }
                 dayCountsEachMonth.put(budget.getYearMonth(), overlappingDays);
             }
-//                Budget budget = budgets.get(i);
-//                if (i == 0) {
-//                    overlappingDays = budget.getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1;
-//                } else if (i == budgets.size() - 1) {
-//                    overlappingDays = end.getDayOfMonth();
-//                } else {
-//                    overlappingDays = budget.getYearMonthInstance().lengthOfMonth();
-//                }
-//            }
         }
 
         Map<String, Double> priceUnitEachMonth = budgets.stream()
