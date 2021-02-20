@@ -46,25 +46,25 @@ public class BudgetCalculator {
                     (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
         }).collect(toList());
 
-        List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
-                .map(budget -> BudgetVo.builder()
-                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
-                        .amount(budget.getAmount())
-                        .build())
-                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
-                .collect(toList()));
+//        List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
+//                .map(budget -> BudgetVo.builder()
+//                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
+//                        .amount(budget.getAmount())
+//                        .build())
+//                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
+//                .collect(toList()));
 
         List<Integer> dayCountsEachMonth = new ArrayList<>();
-        if (budgetVos.size() == 1) {
+        if (budgets.size() == 1) {
             dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
         } else {
-            for (int i = 0; i < budgetVos.size(); i++) {
+            for (int i = 0; i < budgets.size(); i++) {
                 if (i == 0) {
-                    dayCountsEachMonth.add(budgetVos.get(0).getYearMonth().lengthOfMonth() - start.getDayOfMonth() + 1);
-                } else if (i == budgetVos.size() - 1) {
+                    dayCountsEachMonth.add(budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1);
+                } else if (i == budgets.size() - 1) {
                     dayCountsEachMonth.add(end.getDayOfMonth());
                 } else {
-                    dayCountsEachMonth.add(budgetVos.get(i).getYearMonth().lengthOfMonth());
+                    dayCountsEachMonth.add(budgets.get(i).getYearMonthInstance().lengthOfMonth());
                 }
             }
         }
