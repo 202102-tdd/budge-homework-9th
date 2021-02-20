@@ -7,9 +7,11 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 public class BudgetCalculator {
@@ -46,14 +48,6 @@ public class BudgetCalculator {
                     (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
         }).collect(toList());
 
-//        List<BudgetVo> budgetVos = new ArrayList<>(budgets.stream()
-//                .map(budget -> BudgetVo.builder()
-//                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
-//                        .amount(budget.getAmount())
-//                        .build())
-//                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
-//                .collect(toList()));
-
         List<Integer> dayCountsEachMonth = new ArrayList<>();
         if (budgets.size() == 1) {
             dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
@@ -69,18 +63,20 @@ public class BudgetCalculator {
             }
         }
 
-        List<Double> priceUnitEachMonth = budgets.stream()
-                .map(budget -> BudgetVo.builder()
-                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
-                        .amount(budget.getAmount())
-                        .build())
-                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
-                .collect(toList())
-                .stream()
-                .map(v -> {
-                    return v.getAmount() / (double) (v.getYearMonth().lengthOfMonth());
-                })
-                .collect(toList());
+        Map<String, Double> priceUnitEachMonth = budgets.stream()
+                .collect(toMap(budget -> budget.getYearMonth(), budget -> budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth())));
+//        List<Double> priceUnitEachMonth = budgets.stream()
+//                .map(budget -> BudgetVo.builder()
+//                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
+//                        .amount(budget.getAmount())
+//                        .build())
+//                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
+//                .collect(toList())
+//                .stream()
+//                .map(v -> {
+//                    return v.getAmount() / (double) (v.getYearMonth().lengthOfMonth());
+//                })
+//                .collect(toList());
 
         double rtn = 0.0;
         for (int i = 0; i < priceUnitEachMonth.size(); i++) {
