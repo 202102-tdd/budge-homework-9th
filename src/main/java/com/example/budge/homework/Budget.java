@@ -34,4 +34,8 @@ public class Budget {
     double getDailyAmount() {
         return getAmount() / (double) (getYearMonthInstance().lengthOfMonth());
     }
+
+    Period createPeriod() {
+        return new Period(firstDay(), lastDay());
+    }
 }
