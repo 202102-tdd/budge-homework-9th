@@ -24,7 +24,10 @@ public class Period {
     int getOverlappingDays(Budget budget) {
         int overlappingDays;
         if (budget.getYearMonth().equals(getStart().format(ofPattern("yyyyMM")))) {
-            overlappingDays = budget.getYearMonthInstance().lengthOfMonth() - getStart().getDayOfMonth() + 1;
+            int endDays = budget.getYearMonthInstance().lengthOfMonth();
+//            int endDays = budget.getYearMonthInstance().lengthOfMonth();
+            LocalDate overlappingStart = getStart();
+            overlappingDays = endDays - overlappingStart.getDayOfMonth() + 1;
         } else if (budget.getYearMonth().equals(getEnd().format(ofPattern("yyyyMM")))) {
             overlappingDays = getEnd().getDayOfMonth();
         } else {
