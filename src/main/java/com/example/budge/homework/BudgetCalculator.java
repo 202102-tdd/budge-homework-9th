@@ -44,14 +44,11 @@ public class BudgetCalculator {
             for (int i = 0; i < budgets.size(); i++) {
                 int overlappingDays;
                 if (i == 0) {
-                    overlappingDays = budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1;
-//                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), overlappingDays);
+                    overlappingDays = budgets.get(i).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1;
                 } else if (i == budgets.size() - 1) {
                     overlappingDays = end.getDayOfMonth();
-//                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), overlappingDays);
                 } else {
                     overlappingDays = budgets.get(i).getYearMonthInstance().lengthOfMonth();
-//                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), overlappingDays);
                 }
                 dayCountsEachMonth.put(budgets.get(i).getYearMonth(), overlappingDays);
             }
