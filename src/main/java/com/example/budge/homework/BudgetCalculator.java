@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,17 +49,22 @@ public class BudgetCalculator {
                     (yearMonthOfBudget.equals(endYearMonth) || yearMonthOfBudget.isBefore(endYearMonth));
         }).collect(toList());
 
-        List<Integer> dayCountsEachMonth = new ArrayList<>();
+        HashMap<String, Integer> dayCountsEachMonth = new HashMap<String, Integer>();
+//        List<Integer> dayCountsEachMonth = new ArrayList<>();
         if (budgets.size() == 1) {
-            dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
+            dayCountsEachMonth.put(budgets.get(0).getYearMonth(), end.getDayOfMonth() - start.getDayOfMonth() + 1);
+//            dayCountsEachMonth.add(end.getDayOfMonth() - start.getDayOfMonth() + 1);
         } else {
             for (int i = 0; i < budgets.size(); i++) {
                 if (i == 0) {
-                    dayCountsEachMonth.add(budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1);
+                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1);
+//                    dayCountsEachMonth.add(budgets.get(0).getYearMonthInstance().lengthOfMonth() - start.getDayOfMonth() + 1);
                 } else if (i == budgets.size() - 1) {
-                    dayCountsEachMonth.add(end.getDayOfMonth());
+                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), end.getDayOfMonth());
+//                    dayCountsEachMonth.add(end.getDayOfMonth());
                 } else {
-                    dayCountsEachMonth.add(budgets.get(i).getYearMonthInstance().lengthOfMonth());
+                    dayCountsEachMonth.put(budgets.get(i).getYearMonth(), budgets.get(i).getYearMonthInstance().lengthOfMonth());
+//                    dayCountsEachMonth.add(budgets.get(i).getYearMonthInstance().lengthOfMonth());
                 }
             }
         }
@@ -79,9 +85,12 @@ public class BudgetCalculator {
 //                .collect(toList());
 
         double rtn = 0.0;
-        for (int i = 0; i < priceUnitEachMonth.size(); i++) {
-            rtn += dayCountsEachMonth.get(i) * priceUnitEachMonth.get(i);
+        for (Map.Entry<String, Double> entry : priceUnitEachMonth.entrySet()) {
+            rtn += dayCountsEachMonth.get(entry.getKey()) * entry.getValue();
         }
+//        for (int i = 0; i < priceUnitEachMonth.size(); i++) {
+//            rtn += dayCountsEachMonth.get(i) * priceUnitEachMonth.get(i);
+//        }
 
         return rtn;
     }
