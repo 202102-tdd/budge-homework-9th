@@ -5,11 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.util.stream.Collectors.toList;
@@ -41,7 +37,7 @@ public class BudgetCalculator {
         double rtn = 0.0;
         if (budgets.size() == 1) {
             int overlappingDays = end.getDayOfMonth() - start.getDayOfMonth() + 1;
-            double dailyAmount = getDailyAmount(budgets.get(0));
+            double dailyAmount = budgets.get(0).getDailyAmount();
             return overlappingDays * dailyAmount;
         } else {
             for (Budget budget : budgets) {
@@ -53,15 +49,11 @@ public class BudgetCalculator {
                 } else {
                     overlappingDays = budget.getYearMonthInstance().lengthOfMonth();
                 }
-                double dailyAmount = getDailyAmount(budget);
+                double dailyAmount = budget.getDailyAmount();
                 rtn += dailyAmount * overlappingDays;
             }
         }
 
         return rtn;
-    }
-
-    private double getDailyAmount(Budget budget) {
-        return budget.getAmount() / (double) (budget.getYearMonthInstance().lengthOfMonth());
     }
 }

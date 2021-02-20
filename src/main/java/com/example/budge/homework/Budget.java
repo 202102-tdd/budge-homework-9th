@@ -21,4 +21,8 @@ public class Budget {
     YearMonth getYearMonthInstance() {
         return YearMonth.parse(getYearMonth(), DateTimeFormatter.ofPattern("yyyyMM"));
     }
+
+    double getDailyAmount() {
+        return getAmount() / (double) (getYearMonthInstance().lengthOfMonth());
+    }
 }
