@@ -7,7 +7,6 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
@@ -40,7 +39,7 @@ public class BudgetCalculator {
 
         List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
         {
-            YearMonth yearMonthOfBudget = getYearMonthInstance(b);
+            YearMonth yearMonthOfBudget = b.getYearMonthInstance();
             YearMonth startYearMonth = YearMonth.from(start);
             YearMonth endYearMonth = YearMonth.from(end);
             return (yearMonthOfBudget.equals(startYearMonth) || yearMonthOfBudget.isAfter(startYearMonth)) &&
@@ -89,9 +88,5 @@ public class BudgetCalculator {
         }
 
         return rtn;
-    }
-
-    private YearMonth getYearMonthInstance(Budget b) {
-        return YearMonth.parse(b.getYearMonth(), ofPattern("yyyyMM"));
     }
 }
