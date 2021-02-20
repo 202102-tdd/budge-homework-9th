@@ -35,6 +35,7 @@ public class BudgetCalculator {
 //        }).collect(toList());
 
         double rtn = 0.0;
+
         Period period = new Period(start, end);
         for (Budget budget : budgetRepo.getAll()) {
             rtn += budget.overlappingAmount(period);
