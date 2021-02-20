@@ -27,14 +27,14 @@ public class BudgetCalculator {
 
         // get iterator months
         // (202101, 202103) -> (01, 02, 03)
-        LocalDate tmp = LocalDate.of(start.getYear(), start.getMonthValue(), 1);
-        List<String> monthRange = new ArrayList<>();
-        while (!tmp.isAfter(end)) {
-            monthRange.add(startY.format(df));
-            tmp = tmp.plusMonths(1);
-            startY = YearMonth.from(tmp);
-        }
-
+//        LocalDate tmp = LocalDate.of(start.getYear(), start.getMonthValue(), 1);
+//        List<String> monthRange = new ArrayList<>();
+//        while (!tmp.isAfter(end)) {
+//            monthRange.add(startY.format(df));
+//            tmp = tmp.plusMonths(1);
+//            startY = YearMonth.from(tmp);
+//        }
+//
         List<Budget> budgets = budgetRepo.getAll().stream().filter(b ->
         {
             YearMonth yearMonthOfBudget = b.getYearMonthInstance();
@@ -60,16 +60,7 @@ public class BudgetCalculator {
         }
 
         List<Double> priceUnitEachMonth = budgets.stream()
-//                .map(budget -> BudgetVo.builder()
-//                        .yearMonth(LocalDate.parse(budget.getYearMonth() + "01", df2))
-//                        .amount(budget.getAmount())
-//                        .build())
-//                .filter(budgetVo -> monthRange.contains(df.format(budgetVo.getYearMonth())))
-//                .collect(toList())
-//                .stream()
-                .map(v -> {
-                    return v.getAmount() / (double) (v.getYearMonthInstance().lengthOfMonth());
-                })
+                .map(v -> v.getAmount() / (double) (v.getYearMonthInstance().lengthOfMonth()))
                 .collect(toList());
 
         double rtn = 0.0;
